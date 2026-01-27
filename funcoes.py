@@ -53,3 +53,28 @@ def verifica_ganhador (jogadores):
             return jogador
 
     return -1
+
+def conta_pontos (lista):
+    total = 0
+    for peca in lista:
+        total += peca[0] + peca[1]
+    return total
+
+def posicoes_possiveis (mesa, peca):
+    posicoes = []
+
+    if len(mesa) == 0:
+        posicoes.append("E")
+        posicoes.append("D")
+        return posicoes
+
+    esquerda = mesa[0][0]
+    direita = mesa[-1][1]
+
+    if peca[0] == esquerda or peca[1] == esquerda:
+        posicoes.append("E")
+
+    if peca[0] == direita or peca[1] == direita:
+        posicoes.append("D")
+
+    return posicoes
