@@ -60,21 +60,19 @@ def conta_pontos (lista):
         total += peca[0] + peca[1]
     return total
 
-def posicoes_possiveis (mesa, peca):
+def posicoes_possiveis (mesa, pecas):
     posicoes = []
 
     if len(mesa) == 0:
-        posicoes.append("E")
-        posicoes.append("D")
-        return posicoes
+        return list(range(len(pecas)))
 
     esquerda = mesa[0][0]
     direita = mesa[-1][1]
+    for i in range(len(pecas)):
+        peca = pecas[i]
 
-    if peca[0] == esquerda or peca[1] == esquerda:
-        posicoes.append("E")
-
-    if peca[0] == direita or peca[1] == direita:
-        posicoes.append("D")
+        if (peca[0] == esquerda or peca[1] == esquerda or
+            peca[0] == direita or peca[1] == direita):
+            posicoes.append(i)
 
     return posicoes
