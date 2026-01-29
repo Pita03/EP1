@@ -1,11 +1,28 @@
 from funcoes import *
 import random
+from colorama import Fore, Style, init
+
+init()
+
+
+def cor_num(n):
+    cores = {
+        0: Fore.WHITE,
+        1: Fore.BLUE,
+        2: Fore.GREEN,
+        3: Fore.CYAN,
+        4: Fore.YELLOW,
+        5: Fore.MAGENTA,
+        6: Fore.RED,
+    }
+
+    return cores.get(n, Fore.WHITE) + str(n) + Style.RESET_ALL
 
 
 def mostra_mesa(mesa):
     print("MESA:")
     for p in mesa:
-        print(f"[{p[0]}|{p[1]}]", end="")
+        print(f"[{cor_num(p[0])}|{cor_num(p[1])}]", end="")
     print("\n")
 
 
@@ -21,7 +38,7 @@ def mostra_mao_usuario(mao, posicoes):
     print(estrelas)
 
     for p in mao:
-        print(f"[{p[0]}|{p[1]}]", end=" ")
+        print(f"[{cor_num(p[0])}|{cor_num(p[1])}]", end=" ")
     print()
 
     for i in range(len(mao)):
@@ -43,12 +60,18 @@ def pede_indice(posicoes, total):
             return idx
 
         print("Posição inválida!")
-        print("Escolha a peça", [p+1 for p in posicoes])
+        print("Escolha a peça", [p + 1 for p in posicoes])
 
+
+# ==================================
+# LOOP PARA JOGAR NOVAMENTE
+# ==================================
 
 while True:
 
-    # validação n jogadores
+    # -------------------------
+    # VALIDAR NUMERO DE JOGADORES
+    # -------------------------
     while True:
         try:
             n = int(input("Quantos jogadores? (2-4) "))
@@ -61,6 +84,9 @@ while True:
         except ValueError:
             print("Entrada inválida! Digite um número.")
 
+    # -------------------------
+    # INICIAR JOGO
+    # -------------------------
     pecas = cria_pecas()
     jogo = inicia_jogo(n, pecas)
 
@@ -68,9 +94,11 @@ while True:
     monte = jogo["monte"]
     jogadores = jogo["jogadores"]
 
-    jogador_atual = random.randint(0, n-1)
+    jogador_atual = random.randint(0, n - 1)
 
-    # LOOP principal
+    # ==================================
+    # LOOP DA PARTIDA
+    # ==================================
 
     while True:
 
@@ -79,7 +107,7 @@ while True:
         print("--------------------------------")
 
         # BOT
-        if jogador_atual != n-1:
+        if jogador_atual != n - 1:
 
             print("Jogador:", jogador_atual + 1, "com", len(mao), "peça(s)")
 
@@ -96,7 +124,7 @@ while True:
                 peca = mao.pop(idx)
 
                 mesa[:] = adiciona_na_mesa(peca, mesa)
-                print("Colocou:", f"[{peca[0]}|{peca[1]}]")
+                print("Colocou:", f"[{cor_num(peca[0])}|{cor_num(peca[1])}]")
 
         # USUÁRIO
         else:
@@ -118,7 +146,7 @@ while True:
                 peca = mao.pop(idx)
                 mesa[:] = adiciona_na_mesa(peca, mesa)
 
-                print("Colocou:", f"[{peca[0]}|{peca[1]}]")
+                print("Colocou:", f"[{cor_num(peca[0])}|{cor_num(peca[1])}]")
 
         mostra_mesa(mesa)
 
@@ -132,7 +160,7 @@ while True:
 
             for j in jogadores:
                 pontos = conta_pontos(jogadores[j])
-                print("Jogador:", "Você" if j == n-1 else j+1,
+                print("Jogador:", "Você" if j == n - 1 else j + 1,
                       "com", jogadores[j],
                       "e", pontos, "pontos")
 
@@ -145,14 +173,18 @@ while True:
             print("\nVENCEDOR(ES):", end=" ")
 
             for v in vencedores:
-                if v == n-1:
+                if v == n - 1:
                     print("Você", end=" ")
                 else:
-                    print(v+1, end=" ")
+                    print(v + 1, end=" ")
 
             break
 
         jogador_atual = (jogador_atual + 1) % n
+
+    # -------------------------
+    # PERGUNTAR SE JOGA DE NOVO
+    # -------------------------
 
     while True:
         resp = input("\nQuer jogar novamente? (s/n) ").strip().lower()
